@@ -6,6 +6,8 @@ const expressJwt = require('express-jwt');
 const config = require('./config/config');
 
 const regionRoutes = require('./routes/region.routes');
+const countryRoutes = require('./routes/country.routes');
+const cityRoutes = require('./routes/city.routes');
 
 const app = express();
 
@@ -27,6 +29,8 @@ app.get('/health', (req, res) => {
 });
 
 regionRoutes(app);
+countryRoutes(app);
+cityRoutes(app);
 
 const sequelize = new Sequelize(
 	`${config.DB_DIALECT}://${config.DB_USER}:${config.DB_PASS}@${config.DB_HOST}:${config.DB_PORT}/${config.DB_DATABASE}`

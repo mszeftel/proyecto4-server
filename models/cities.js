@@ -14,7 +14,6 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     countryId: {
-      field: 'country_id',
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
@@ -27,6 +26,7 @@ module.exports = function(sequelize, DataTypes) {
     tableName: 'cities',
     schema: 'datawarehouse',
     timestamps: false,
+    underscored: true,
     indexes: [
       {
         name: "PRIMARY",

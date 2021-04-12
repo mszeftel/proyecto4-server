@@ -18,6 +18,7 @@ module.exports = function(sequelize, DataTypes) {
     tableName: 'regions',
     schema: 'datawarehouse',
     timestamps: false,
+    underscored: true,
     indexes: [
       {
         name: "PRIMARY",

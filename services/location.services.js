@@ -13,7 +13,6 @@ const sequelize = new Sequelize(
 const { Regions, Countries, Cities } = initModels(sequelize);
 
 async function getRegions() {
-	console.log('getRegions');
 	const { count, rows } = await Regions.findAndCountAll();
 	return rows;
 }
@@ -101,7 +100,7 @@ async function newCountry(regionId, country) {
 		}
 		const createdCountry = await Countries.create({
 			name: country.name,
-			region_id: regionId
+			regionId: regionId
 		});
 
 		return createdCountry;
@@ -134,7 +133,7 @@ async function newCity(countryId, city) {
 		}
 		const createdCity = await Cities.create({
 			name: city.name,
-			country_id: countryId
+			countryId: countryId
 		});
 
 		return createdCity;
