@@ -4,19 +4,19 @@ var _countries = require("./countries");
 var _regions = require("./regions");
 
 function initModels(sequelize) {
-  var cities = _cities(sequelize, DataTypes);
-  var countries = _countries(sequelize, DataTypes);
-  var regions = _regions(sequelize, DataTypes);
+  var Cities = _cities(sequelize, DataTypes);
+  var Countries = _countries(sequelize, DataTypes);
+  var Regions = _regions(sequelize, DataTypes);
 
-  cities.belongsTo(countries, { foreignKey: "countryId"});
-  countries.hasMany(cities, { foreignKey: "countryId"});
-  countries.belongsTo(regions, { foreignKey: "regionId"});
-  regions.hasMany(countries, { foreignKey: "regionId"});
+  Cities.belongsTo(Countries, { foreignKey: "country_id"});
+  Countries.hasMany(Cities, { foreignKey: "country_id", onDelete: 'CASCADE'});
+  Countries.belongsTo(Regions, { foreignKey: "region_id"});
+  Regions.hasMany(Countries, { foreignKey: "region_id", onDelete: 'CASCADE'});
 
   return {
-    cities,
-    countries,
-    regions,
+    Cities,
+    Countries,
+    Regions,
   };
 }
 module.exports = initModels;

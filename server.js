@@ -4,6 +4,8 @@ const Sequelize = require('sequelize');
 const expressJwt = require('express-jwt');
 const config = require('./config/config');
 
+const regionRoutes = require('./routes/region.routes');
+
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -21,6 +23,8 @@ app.use(expressJwt({ secret: config.JWT_KEY, algorithms: ['HS512'] })
 app.get('/health', (req, res) => {
 	res.json({ messsage: "Datawarehouse API" })
 });
+
+regionRoutes(app);
 
 const sequelize = new Sequelize(
 	`${config.DB_DIALECT}://${config.DB_USER}:${config.DB_PASS}@${config.DB_HOST}:${config.DB_PORT}/${config.DB_DATABASE}`
