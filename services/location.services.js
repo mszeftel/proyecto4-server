@@ -13,6 +13,7 @@ const sequelize = new Sequelize(
 const { Regions, Countries, Cities } = initModels(sequelize);
 
 async function getRegions() {
+	console.log('getRegions');
 	const { count, rows } = await Regions.findAndCountAll();
 	return rows;
 }

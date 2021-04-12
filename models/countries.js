@@ -13,7 +13,8 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(50),
       allowNull: false
     },
-    region_id: {
+    regionId: {
+      field: 'region_id',
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {

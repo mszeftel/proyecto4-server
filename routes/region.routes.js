@@ -1,6 +1,5 @@
 const locationService = require('../services/location.services')
 
-
 module.exports = (app) => {
 	app.get('/region', async (req, res) => {
 		const regions = await locationService.getRegions();
@@ -190,6 +189,28 @@ module.exports = (app) => {
 		}
 		catch (error) {
 			res.status(400).send(error.message);
+		}
+	})
+
+	app.get('/country', async (req, res) => {
+		const regions = await locationService.getAllCountries();
+
+		if (regions) {
+			res.status(200).json(regions);
+		}
+		else {
+			res.status(404).send('Countries not found');
+		}
+	})
+
+	app.get('/city', async (req, res) => {
+		const regions = await locationService.getAllCities();
+
+		if (regions) {
+			res.status(200).json(regions);
+		}
+		else {
+			res.status(404).send('Countries not found');
 		}
 	})
 
