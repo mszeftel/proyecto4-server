@@ -1,19 +1,24 @@
 var DataTypes = require("sequelize").DataTypes;
-var _cities = require("./cities");
-var _countries = require("./countries");
-var _regions = require("./regions");
+var _Accounts = require("./accounts");
+var _Cities = require("./cities");
+var _Countries = require("./countries");
+var _Regions = require("./regions");
 
 function initModels(sequelize) {
-  var Cities = _cities(sequelize, DataTypes);
-  var Countries = _countries(sequelize, DataTypes);
-  var Regions = _regions(sequelize, DataTypes);
+  var Accounts = _Accounts(sequelize, DataTypes);
+  var Cities = _Cities(sequelize, DataTypes);
+  var Countries = _Countries(sequelize, DataTypes);
+  var Regions = _Regions(sequelize, DataTypes);
 
-  Cities.belongsTo(Countries, { foreignKey: "country_id"});
-  Countries.hasMany(Cities, { foreignKey: "country_id", onDelete: 'CASCADE'});
-  Countries.belongsTo(Regions, { foreignKey: "region_id"});
-  Regions.hasMany(Countries, { foreignKey: "region_id", onDelete: 'CASCADE'});
+  Accounts.belongsTo(Cities, { as: "city", foreignKey: "cityId"});
+  Cities.hasMany(Accounts, { as: "accounts", foreignKey: "cityId"});
+  Cities.belongsTo(Countries, { as: "country", foreignKey: "countryId"});
+  Countries.hasMany(Cities, { as: "cities", foreignKey: "countryId", onDelete: 'CASCADE'});
+  Countries.belongsTo(Regions, { as: "region", foreignKey: "regionId"});
+  Regions.hasMany(Countries, { as: "countries", foreignKey: "regionId", onDelete: 'CASCADE'});
 
   return {
+    Accounts,
     Cities,
     Countries,
     Regions,

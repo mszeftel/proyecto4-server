@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Cities', {
+  return sequelize.define('Accounts', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -11,18 +11,30 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(50),
       allowNull: false
     },
-    countryId: {
+    address: {
+      type: DataTypes.STRING(50),
+      allowNull: true
+    },
+    email: {
+      type: DataTypes.STRING(50),
+      allowNull: true
+    },
+    phone: {
+      type: DataTypes.STRING(50),
+      allowNull: true
+    },
+    cityId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
-        model: 'countries',
+        model: 'cities',
         key: 'id'
       },
-      field: 'country_id'
+      field: 'city_id'
     }
   }, {
     sequelize,
-    tableName: 'cities',
+    tableName: 'accounts',
     timestamps: false,
     indexes: [
       {
@@ -34,10 +46,10 @@ module.exports = function(sequelize, DataTypes) {
         ]
       },
       {
-        name: "FK_countries_regions",
+        name: "FK__cities",
         using: "BTREE",
         fields: [
-          { name: "country_id" },
+          { name: "city_id" },
         ]
       },
     ]

@@ -1,8 +1,6 @@
-/* jshint indent: 2 */
-
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('regions', {
+  return sequelize.define('Regions', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -16,9 +14,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'regions',
-    schema: 'datawarehouse',
     timestamps: false,
-    underscored: true,
     indexes: [
       {
         name: "PRIMARY",
