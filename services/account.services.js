@@ -23,7 +23,7 @@ async function newAccount(account) {
 				name: account.name,
 				address: account.address,
 				email: account.email,
-				phone: account.phhone,
+				phone: account.phone,
 				cityId: account.cityId,
 			}
 		);
