@@ -2,7 +2,6 @@ const config = require('../config/config')
 const Sequelize = require('sequelize');
 const { QueryTypes, Op } = require('sequelize');
 const initModels = require('../models/init-models');
-const cityRoutes = require('../routes/city.routes');
 
 const sequelize = new Sequelize(
 	`${config.DB_DIALECT}://${config.DB_USER}:${config.DB_PASS}@${config.DB_HOST}:${config.DB_PORT}/${config.DB_DATABASE}`,
