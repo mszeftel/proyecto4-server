@@ -25,11 +25,6 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true,
       defaultValue: ""
     },
-    phone: {
-      type: DataTypes.STRING(50),
-      allowNull: true,
-      defaultValue: ""
-    },
     preference: {
       type: DataTypes.ENUM('No preference','Favourite','Do not disturb'),
       allowNull: false,

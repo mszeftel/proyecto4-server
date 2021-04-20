@@ -105,6 +105,7 @@ async function getContactById(contactId) {
 		]
 	});
 
+	console.log(JSON.stringify(contact));
 	return contact;
 }
 

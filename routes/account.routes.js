@@ -2,7 +2,7 @@ const accountService = require('../services/account.services')
 
 module.exports = (app) => {
 	app.get('/account', async (req, res) => {
-		const accounts = await accountService.getAccounts();
+		const accounts = await accountService.getAccounts(req.query.q);
 
 		if (accounts) {
 			res.status(200).json(accounts);

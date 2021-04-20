@@ -1,5 +1,6 @@
 const config = require('../config/config')
 const Sequelize = require('sequelize');
+const { Op } = require('sequelize');
 const initModels = require('../models/init-models');
 
 const sequelize = new Sequelize(
@@ -11,8 +12,12 @@ const sequelize = new Sequelize(
 
 const { Accounts } = initModels(sequelize);
 
-async function getAccounts() {
-	const { count, rows } = await Accounts.findAndCountAll();
+async function getAccounts(q) {
+	let queryOptions = {}
+
+	if (q) queryOptions.where = { name: { [Op.like]: `%${q}%` } }
+
+	const rows = await Accounts.findAll(queryOptions);
 	return rows;
 }
 
@@ -88,5 +93,5 @@ async function deleteAccount(accountId) {
 }
 
 module.exports = {
-	getAccounts,getAccountById,newAccount,updateAccount,deleteAccount
+	getAccounts, getAccountById, newAccount, updateAccount, deleteAccount
 }
