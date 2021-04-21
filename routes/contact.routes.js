@@ -12,7 +12,7 @@ module.exports = (app) => {
 		}
 	})
 
-	app.get('/contact/filter', async (req, res) => {
+	app.get('/contact/filters', async (req, res) => {
 		const filters = await contactService.getContactFilters(req.query.q);
 
 		console.log(filters);
@@ -25,9 +25,21 @@ module.exports = (app) => {
 		}
 	})
 
+	app.get('/contact/channelOptions', async (req, res) => {
+		try {
+			const options = await contactService.getChannelOptions();
+			res.status(200).json(options);
+		}
+		catch (error) {
+			res.status(400).send(error.message);
+		}
+	})
+
 	app.post('/contact', async (req, res) => {
 		try {
 			const contact = await contactService.newContact(req.body);
+
+			console.log(contact);
 
 			if (contact) {
 				res.status(202).json(contact);
@@ -68,6 +80,7 @@ module.exports = (app) => {
 		}
 	})
 
+	
 	app.delete('/contact/:contactId', async (req, res) => {
 		try {
 			await contactService.deleteContact(req.params.contactId);
@@ -77,4 +90,6 @@ module.exports = (app) => {
 			res.status(400).send(error.message);
 		}
 	})
+
+	
 }

@@ -126,7 +126,7 @@ async function getCities(countryId) {
 
 async function newCity(countryId, city) {
 	try {
-		const country = await getRegionById(countryId);
+		const country = await getCountryById(countryId);
 		if (!country) {
 			throw new Error(`Country ${countryId} does not exist`);
 		}

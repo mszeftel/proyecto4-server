@@ -2,6 +2,7 @@ const config = require('../config/config')
 const Sequelize = require('sequelize');
 const { QueryTypes, Op } = require('sequelize');
 const initModels = require('../models/init-models');
+const contacts = require('../models/contacts');
 
 const sequelize = new Sequelize(
 	`${config.DB_DIALECT}://${config.DB_USER}:${config.DB_PASS}@${config.DB_HOST}:${config.DB_PORT}/${config.DB_DATABASE}`,
@@ -60,6 +61,19 @@ async function getContacts(q, filters, limit, offset) {
 
 async function newContact(contact) {
 	try {
+		console.log(contact);
+
+		let queryObject = {}
+
+		if (contact.contactChannels && contact.contactChannels.length) {
+			queryObject = {
+				include: [
+					{ model: ContactChannels, as: "contactChannels" },
+				]
+			}
+		}
+
+
 		const createdContact = await Contacts.create(
 			{
 				name: contact.name,
@@ -72,17 +86,15 @@ async function newContact(contact) {
 				accountId: contact.accountId,
 				contactChannels: contact.contactChannels
 			},
-			{
-				include: [
-					{ model: ContactChannels, as: "contactChannels" },
-				]
-			}
+			queryObject
 		);
 
 		return createdContact;
 	}
 	catch (e) {
+		console.log(e);
 	}
+
 }
 
 async function getContactById(contactId) {
@@ -250,6 +262,10 @@ async function getContactFilters(q) {
 	return filters;
 }
 
+async function getChannelOptions() {
+	return { type: ContactChannels.rawAttributes.type.values, preference: ContactChannels.rawAttributes.preference.values }
+}
+
 module.exports = {
-	getContacts, getContactById, newContact, updateContact, deleteContact, getContactFilters
+	getContacts, getContactById, newContact, updateContact, deleteContact, getContactFilters, getChannelOptions
 }
