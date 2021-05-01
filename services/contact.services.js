@@ -20,33 +20,48 @@ async function getContacts(q, filters, limit, offset) {
 			limit: Number(limit) || 20,
 			offset: Number(offset) || 0,
 			include: [
-				{ model: ContactChannels, as: "contactChannels" },
-				{
-					model: Cities, as: "city",
+				{ model: ContactChannels, as: "contactChannels"},
+				{	model: Cities, as: "city",
 					include: [
 						{
 							model: Countries, as: "country",
-							include: [{ model: Regions, as: "region" }]
+							include: [{ model: Regions, as: "region"}]
 						}
 					]
 				},
-				{ model: Accounts, as: "account" }
+				{ model: Accounts, as: "account", required: true }
 			]
 		}
 
 		if (q) {
 			queryObject.where = { name: { [Op.like]: `%${q}%` } }
-		}
-		if (filters) {
-			if (filters.city)
-				queryObject.include[1].where = { name: { [Op.in]: [filters.city] } };
-			if (filters.country)
-				queryObject.include[1].include[0].where = { name: { [Op.in]: [filters.country] } };
-			if (filters.region)
-				queryObject.include[1].include[0].include[0].where = { name: { [Op.in]: [filters.region] } };
-			if (filters.account)
-				queryObject.include[2].where = { name: { [Op.in]: [filters.account] } };
+		}	
 
+		if (filters) {
+			if (filters.city){
+				queryObject.include[1].required = true;
+				queryObject.include[1].where = { name: { [Op.in]: [filters.city] } };
+				
+			}
+
+			if (filters.country){
+				queryObject.include[1].include[0].where = { name: { [Op.in]: [filters.country] } };
+				queryObject.include[1].required = true;
+				queryObject.include[1].include[0].required = true;
+			}
+				
+			if (filters.region){
+				queryObject.include[1].include[0].include[0].where = { name: { [Op.in]: [filters.region] } };
+				queryObject.include[1].required = true;
+				queryObject.include[1].include[0].required = true;
+				queryObject.include[1].include[0].include[0].required = true;
+			}
+				
+			if (filters.account){
+				queryObject.include[2].where = { name: { [Op.in]: [filters.account] } };
+				queryObject.include[2].required = true;
+			}
+				
 		}
 
 
@@ -216,7 +231,7 @@ async function getContactFilters(q) {
 		}
 	)
 	regions.forEach(r => {
-		filters.push({ filter: 'region', query: r.name, filterString: `filters[region]=${r.name}` })
+		filters.push({ filter: 'region', query: r.name, filterString: `filter[region]=${r.name}` })
 	})
 
 	const countries = await sequelize.query(
@@ -230,7 +245,7 @@ async function getContactFilters(q) {
 		}
 	)
 	countries.forEach(r => {
-		filters.push({ filter: 'country', query: r.name, filterString: `filters[country]=${r.name}` })
+		filters.push({ filter: 'country', query: r.name, filterString: `filter[country]=${r.name}` })
 	})
 
 	const cities = await sequelize.query(
@@ -243,7 +258,7 @@ async function getContactFilters(q) {
 		}
 	)
 	cities.forEach(r => {
-		filters.push({ filter: 'city', query: r.name, filterString: `filters[city]=${r.name}` })
+		filters.push({ filter: 'city', query: r.name, filterString: `filter[city]=${r.name}` })
 	})
 
 	const accounts = await sequelize.query(
@@ -256,7 +271,7 @@ async function getContactFilters(q) {
 		}
 	)
 	accounts.forEach(r => {
-		filters.push({ filter: 'account', query: r.name, filterString: `filters[account]=${r.name}` })
+		filters.push({ filter: 'account', query: r.name, filterString: `filter[account]=${r.name}` })
 	})
 
 	return filters;

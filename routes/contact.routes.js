@@ -2,7 +2,7 @@ const contactService = require('../services/contact.services')
 
 module.exports = (app) => {
 	app.get('/contact', async (req, res) => {
-		const contacts = await contactService.getContacts(req.query.q,req.query.filters,req.query.limit,req.query.offset);
+		const contacts = await contactService.getContacts(req.query.q,req.query.filter,req.query.limit,req.query.offset);
 
 		if (contacts) {
 			res.status(200).json(contacts);
