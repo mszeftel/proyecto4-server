@@ -18,14 +18,15 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-/*
+
 app.use(expressJwt({ secret: config.JWT_KEY, algorithms: ['HS512'] })
 	.unless({
 		path: [{ url: '/health', methods: ['GET'] },
 		{ url: '/user/login', methods: ['POST'] },
-		{ url: '/user', methods: ['POST'] }]
+		{ url: '/user/self', methods: ['GET'] },
+		]
 	})
-);*/
+);
 
 app.get('/health', (req, res) => {
 	res.json({ messsage: "Datawarehouse API" })
