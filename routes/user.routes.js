@@ -1,0 +1,67 @@
+const userService = require('../services/user.services')
+
+module.exports = (app) => {
+	app.get('/user', async (req, res) => {
+		const users = await userService.getUsers(req.query.q);
+
+		if (users) {
+			res.status(200).json(users);
+		}
+		else {
+			res.status(404).send('Users not found');
+		}
+	})
+
+	app.post('/user', async (req, res) => {
+		try {
+			const user = await userService.newUser(req.body);
+
+			if (user) {
+				res.status(202).json(user);
+			}
+			else {
+				res.status(400).send('Could not create user');
+			}
+		}
+		catch (error) {
+			res.status(400).send(error.message);
+
+		}
+	})
+
+	//Get, Update, Delete
+	app.get('/user/:userId', async (req, res) => {
+		try {
+			const user = await userService.getUserById(req.params.userId);
+			if (user) {
+				res.status(200).json(user);
+			}
+			else {
+				throw new Error('User not found');
+			}
+		}
+		catch (error) {
+			res.status(400).send(error.message);
+		}
+	})
+
+	app.put('/user/:userId', async (req, res) => {
+		try {
+			await userService.updateUser(req.params.userId, req.body);
+			res.status(200).send('User updated');
+		}
+		catch (error) {
+			res.status(400).send(error.message);
+		}
+	})
+
+	app.delete('/user/:userId', async (req, res) => {
+		try {
+			await userService.deleteUser(req.params.userId);
+			res.status(200).send('User deleted');
+		}
+		catch (error) {
+			res.status(400).send(error.message);
+		}
+	})
+}

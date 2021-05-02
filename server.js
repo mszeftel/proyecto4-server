@@ -10,6 +10,7 @@ const countryRoutes = require('./routes/country.routes');
 const cityRoutes = require('./routes/city.routes');
 const accountRoutes = require('./routes/account.routes');
 const contactRoutes = require('./routes/contact.routes');
+const userRoutes = require('./routes/user.routes');
 
 const app = express();
 
@@ -35,6 +36,7 @@ countryRoutes(app);
 cityRoutes(app);
 accountRoutes(app);
 contactRoutes(app);
+userRoutes(app);
 
 const sequelize = new Sequelize(
 	`${config.DB_DIALECT}://${config.DB_USER}:${config.DB_PASS}@${config.DB_HOST}:${config.DB_PORT}/${config.DB_DATABASE}`
