@@ -1,4 +1,5 @@
 const config = require('../config/config')
+const jwt = require('jsonwebtoken');
 const Sequelize = require('sequelize');
 const { Op } = require('sequelize');
 const initModels = require('../models/init-models');
@@ -13,7 +14,7 @@ const sequelize = new Sequelize(
 const { Users } = initModels(sequelize);
 
 async function getUsers(q) {
-	let queryOptions = {attributes: {exclude: ['password']}}
+	let queryOptions = { attributes: { exclude: ['password'] } }
 
 	if (q) queryOptions.where = { name: { [Op.like]: `%${q}%` } }
 
@@ -23,6 +24,10 @@ async function getUsers(q) {
 
 async function newUser(user) {
 	try {
+		const duplicatedEmail = await Users.findOne({ where: { email: user.email } });
+		if (duplicatedEmail)
+			throw new Error('Email already exists');
+
 		const createdUser = await Users.create(
 			{
 				name: user.name,
@@ -32,18 +37,19 @@ async function newUser(user) {
 				profile: user.profile
 			}
 		);
-		
-		createdUser.password='*';
+
+		createdUser.password = '*';
 
 		return createdUser;
 	}
 	catch (e) {
+		throw e;
 	}
 }
 
 async function getUserById(userId) {
 	const user = await Users.findOne({
-		attributes: {exclude: ['password']},
+		attributes: { exclude: ['password'] },
 		where: {
 			id: userId
 		}
@@ -54,6 +60,12 @@ async function getUserById(userId) {
 
 async function updateUser(userId, user) {
 	try {
+		const duplicatedEmail = await Users.findOne({
+			where: { email: user.email, id: { [Op.not]: userId } }
+		});
+		if (duplicatedEmail)
+			throw new Error('Email already exists');
+
 		const oldUser = await Users.findOne({
 			where: {
 				id: userId
@@ -65,7 +77,7 @@ async function updateUser(userId, user) {
 			oldUser.lastname = user.lastname;
 			oldUser.email = user.email;
 			oldUser.profile = user.profile;
-			if( user.password ) oldUser.password = user.password;			
+			if (user.password) oldUser.password = user.password;
 			oldUser.save();
 		}
 		else
@@ -73,6 +85,7 @@ async function updateUser(userId, user) {
 
 	}
 	catch (error) {
+		throw error;
 	}
 }
 
@@ -94,6 +107,41 @@ async function deleteUser(userId) {
 	}
 }
 
+async function signIn(email, password) {
+	//Check credentials
+	const user = await Users.findOne({
+		where: {
+			email: email || '',
+			password: password || ''
+		}
+	});
+
+	console.log(user);
+
+	if (user) {
+		const token = jwt.sign({
+			id: user.id,
+			email: user.email,
+			profile: user.profile,
+		}, config.JWT_KEY, {
+			algorithm: "HS512",
+			expiresIn: 12000
+		});
+
+		return token;
+	}
+	else {
+		return undefined;
+	}
+}
+
+async function getUserByToken(token) {
+	const decodedUser = jwt.verify(token, config.JWT_KEY);
+	const user = await getUserById(decodedUser.id);
+
+	return user;
+}
+
 module.exports = {
-	getUsers, getUserById, newUser, updateUser, deleteUser
+	getUsers, getUserById, newUser, updateUser, deleteUser, signIn, getUserByToken
 }

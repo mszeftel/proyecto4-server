@@ -1,7 +1,38 @@
 const userService = require('../services/user.services')
+const userMiddlewares = require('../middlewares/user.middlewares');
 
 module.exports = (app) => {
-	app.get('/user', async (req, res) => {
+	 //Login email and password. Return JWT token if success.
+	 app.post('/user/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    const token = await userService.signIn(email, password);
+
+    if (token) {
+      res.status(200).json({token});
+    }
+    else {
+      res.status(400).json({ error: 'Bad credentials' });
+    }
+  })
+
+	app.get('/user/self', async (req, res) => {
+    try{
+      const token = req.headers.authorization.split(' ')[1];
+      const user = await userService.getUserByToken(token);
+      
+      if(user){
+        res.status(200).json(user);
+      }
+      else
+        throw new Error("User not found");
+    }
+    catch (error){
+      res.status(404).json({error: error.message});
+    }
+  })
+
+	app.get('/user', userMiddlewares.isAdmin, async (req, res) => {
 		const users = await userService.getUsers(req.query.q);
 
 		if (users) {
@@ -12,7 +43,7 @@ module.exports = (app) => {
 		}
 	})
 
-	app.post('/user', async (req, res) => {
+	app.post('/user', userMiddlewares.isAdmin, async (req, res) => {
 		try {
 			const user = await userService.newUser(req.body);
 
@@ -30,7 +61,7 @@ module.exports = (app) => {
 	})
 
 	//Get, Update, Delete
-	app.get('/user/:userId', async (req, res) => {
+	app.get('/user/:userId', userMiddlewares.isAdmin, async (req, res) => {
 		try {
 			const user = await userService.getUserById(req.params.userId);
 			if (user) {
@@ -45,7 +76,7 @@ module.exports = (app) => {
 		}
 	})
 
-	app.put('/user/:userId', async (req, res) => {
+	app.put('/user/:userId', userMiddlewares.isAdmin, async (req, res) => {
 		try {
 			await userService.updateUser(req.params.userId, req.body);
 			res.status(200).send('User updated');
@@ -55,7 +86,7 @@ module.exports = (app) => {
 		}
 	})
 
-	app.delete('/user/:userId', async (req, res) => {
+	app.delete('/user/:userId', userMiddlewares.isAdmin, async (req, res) => {
 		try {
 			await userService.deleteUser(req.params.userId);
 			res.status(200).send('User deleted');
@@ -65,3 +96,4 @@ module.exports = (app) => {
 		}
 	})
 }
+
