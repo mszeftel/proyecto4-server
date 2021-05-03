@@ -12,7 +12,10 @@ const accountRoutes = require('./routes/account.routes');
 const contactRoutes = require('./routes/contact.routes');
 const userRoutes = require('./routes/user.routes');
 
-const app = express();
+const rootRouter = express();
+const app = express.Router();
+
+rootRouter.use(config.NODE_BASEURL,app);	
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -21,9 +24,9 @@ app.use(bodyParser.json());
 
 app.use(expressJwt({ secret: config.JWT_KEY, algorithms: ['HS512'] })
 	.unless({
-		path: [{ url: '/health', methods: ['GET'] },
-		{ url: '/user/login', methods: ['POST'] },
-		{ url: '/user/self', methods: ['GET'] },
+		path: [{ url:  `${config.NODE_BASEURL}/health`, methods: ['GET'] },
+		{ url: `${config.NODE_BASEURL}/user/login`, methods: ['POST'] },
+		{ url: `${config.NODE_BASEURL}/user/self`, methods: ['GET'] },
 		]
 	})
 );
@@ -52,7 +55,8 @@ sequelize.authenticate()
 		process.exit(1);
 	})
 
-app.listen(config.PORT, () => {
+
+rootRouter.listen(config.PORT, () => {
 	console.log(`Server listening on PORT ${config.PORT}`)
 });
 
