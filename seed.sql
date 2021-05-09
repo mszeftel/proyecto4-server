@@ -1,14 +1,25 @@
 USE `datawarehouse`;
 
 --
--- Volcado de datos para la tabla `accounts`
+-- Volcado de datos para la tabla `regions`
 --
 
-INSERT INTO `accounts` (`id`, `name`, `address`, `email`, `phone`, `city_id`) VALUES
-(8, 'La montevideana', 'Artigas', 'info@mont.uy', '231312', 7),
-(11, 'La mejor', 'Centro del mundo', 'info@lamejor.com', '+54 16618746546', 1),
-(12, 'Miau Mouse', 'Montevideo 260', 'consultas@maiumouse', '54114041265', 1),
-(13, 'Lactea', '', 'consultas@lectea.com', '56223456932', 11);
+INSERT INTO `regions` (`id`, `name`) VALUES
+(1, 'Sudamérica '),
+(2, 'Norteamérica'),
+(4, 'Centroamérica ');
+
+--
+-- Volcado de datos para la tabla `countries`
+--
+
+INSERT INTO `countries` (`id`, `name`, `region_id`) VALUES
+(1, 'Argentina', 1),
+(2, 'Mexico', 2),
+(4, 'Uruguay', 1),
+(7, 'Estados Unidos', 2),
+(8, 'Chile', 1),
+(10, 'Panamá', 4);
 
 
 --
@@ -24,6 +35,16 @@ INSERT INTO `cities` (`id`, `name`, `country_id`) VALUES
 (9, 'Boston', 7),
 (11, 'Santiago de Chile', 8),
 (12, 'Panamá', 10);
+
+--
+-- Volcado de datos para la tabla `accounts`
+--
+
+INSERT INTO `accounts` (`id`, `name`, `address`, `email`, `phone`, `city_id`) VALUES
+(8, 'La montevideana', 'Artigas', 'info@mont.uy', '231312', 7),
+(11, 'La mejor', 'Centro del mundo', 'info@lamejor.com', '+54 16618746546', 1),
+(12, 'Miau Mouse', 'Montevideo 260', 'consultas@maiumouse', '54114041265', 1),
+(13, 'Lactea', '', 'consultas@lectea.com', '56223456932', 11);
 
 
 --
@@ -51,25 +72,7 @@ INSERT INTO `contact_channels` (`id`, `contact_id`, `type`, `handle`, `preferenc
 (24, 4, 'Phone', 'asdd', 'Favourite'),
 (25, 11, 'Twitter', '@marito_castle', 'Favourite');
 
---
--- Volcado de datos para la tabla `countries`
---
-
-INSERT INTO `countries` (`id`, `name`, `region_id`) VALUES
-(1, 'Argentina', 1),
-(2, 'Mexico', 2),
-(4, 'Uruguay', 1),
-(7, 'Estados Unidos', 2),
-(8, 'Chile', 1),
-(10, 'Panamá', 4);
 
 
 
---
--- Volcado de datos para la tabla `regions`
---
 
-INSERT INTO `regions` (`id`, `name`) VALUES
-(1, 'Sudamérica '),
-(2, 'Norteamérica'),
-(4, 'Centroamérica ');
