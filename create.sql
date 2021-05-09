@@ -200,6 +200,9 @@ ALTER TABLE `contacts`
 ALTER TABLE `contact_channels`
   ADD CONSTRAINT `FK__contacts` FOREIGN KEY (`contact_id`) REFERENCES `contacts` (`id`) ON DELETE CASCADE;
 
+CREATE DATABASE IF NOT EXISTS `datawarehouse`;
+USE `datawarehouse`;
+
 --
 -- Filtros para la tabla `countries`
 --

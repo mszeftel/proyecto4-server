@@ -1,3 +1,4 @@
+USE `datawarehouse`;
 
 --
 -- Volcado de datos para la tabla `accounts`
