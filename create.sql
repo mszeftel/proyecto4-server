@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS `datawarehouse`;
+USE `datawarehouse`;
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -220,5 +222,5 @@ COMMIT;
 
 INSERT INTO `users` (`id`, `name`, `lastname`, `email`, `profile`, `password`) VALUES
 (1, 'admin', 'admin', 'admin@dw.com', 'admin', 'admin'),
-(2, 'guest', 'guest', 'guest@dw.com', 'basic', 'guesty');
+(2, 'guest', 'guest', 'guest@dw.com', 'basic', 'guest');
 
